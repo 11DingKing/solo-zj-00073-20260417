@@ -2,26 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Clock9,
-  FileText,
-  FolderTree,
-  LayoutDashboard,
-  Tag,
-  Users,
-} from "lucide-react";
 import { WEBSITE } from "@/constants/info";
+import { adminNavItems } from "@/constants/navigation";
 import { cn } from "@/lib/utils";
 import { UserNav } from "./user-nav";
-
-const navItems = [
-  { href: "/admin", label: "仪表盘", icon: LayoutDashboard },
-  { href: "/admin/categories", label: "分类管理", icon: FolderTree },
-  { href: "/admin/tags", label: "标签管理", icon: Tag },
-  { href: "/admin/blogs", label: "博客管理", icon: FileText },
-  { href: "/admin/changelogs", label: "更新日志", icon: Clock9 },
-  { href: "/admin/users", label: "用户管理", icon: Users },
-];
 
 interface AdminSidebarProps {
   user: {
@@ -55,7 +39,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
       </div>
 
       <nav className="space-y-1 p-4">
-        {navItems.map((item) => {
+        {adminNavItems.map((item) => {
           const isActive =
             item.href === "/admin"
               ? pathname === "/admin"
