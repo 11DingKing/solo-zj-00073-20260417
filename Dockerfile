@@ -48,6 +48,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# 安装必要的依赖（用于 prisma）
+RUN apk add --no-cache openssl
+
 # 创建非 root 用户
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
@@ -60,6 +63,15 @@ COPY --from=builder /app/.next/static ./.next/static
 # 复制静态资源
 COPY --from=builder /app/public/images ./public/images
 
+# 复制 prisma 目录（包含 schema 和 migrations）
+COPY --from=builder /app/prisma ./prisma
+
+# 复制启动脚本
+COPY --from=builder /app/start.sh ./start.sh
+
+# 给启动脚本执行权限
+RUN chmod +x ./start.sh
+
 # 设置权限
 RUN chown -R nextjs:nodejs /app
 
@@ -68,5 +80,5 @@ USER nextjs
 # 暴露端口
 EXPOSE 3000
 
-# 启动应用
-CMD ["node", "server.js"]
+# 启动应用（使用启动脚本）
+CMD ["./start.sh"]

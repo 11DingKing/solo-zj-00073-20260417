@@ -1,10 +1,23 @@
 services:
   app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: "mysql://root:123456@mariadb:3306/fuxiaochen"
+        NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
     image: fuxiaochen:latest
     container_name: fuxiaochen
     restart: unless-stopped
     ports:
       - "3000:3000"
+    environment:
+      - DATABASE_HOST=mariadb
+      - DATABASE_PORT=3306
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=123456
+      - DATABASE_NAME=fuxiaochen
+      - DATABASE_URL=mysql://root:123456@mariadb:3306/fuxiaochen
     env_file:
       - .env
     networks:
